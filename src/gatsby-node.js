@@ -33,7 +33,7 @@ const runQuery = (handler, { query, mapping, exclude }) => handler(query).then((
     for (let source in r.data) {
         // Check for custom serializer
         if (typeof mapping?.[source]?.serializer === `function`) {
-            if (r.data[source] && Array.isArray(r.data[source].edges)) { 
+            if (r.data[source] && Array.isArray(r.data[source].edges)) {
                 const serializedEdges = mapping[source].serializer(r.data[source].edges);
 
                 if (!Array.isArray(serializedEdges)) {
@@ -45,10 +45,10 @@ const runQuery = (handler, { query, mapping, exclude }) => handler(query).then((
 
         // Removing excluded paths
         if (r.data?.[source]?.edges && r.data[source].edges.length) {
-            r.data[source].edges = r.data[source].edges.filter(({ node }) => !exclude.some((excludedRoute) => { 
+            r.data[source].edges = r.data[source].edges.filter(({ node }) => !exclude.some((excludedRoute) => {
                 const sourceType = node.__typename ? `all${node.__typename}` : source;
                 const slug = (sourceType === `allMarkdownRemark` || sourceType === `allMdx`) || (node?.fields?.slug) ? node.fields.slug.replace(/^\/|\/$/, ``) : node.slug.replace(/^\/|\/$/, ``);
-                
+
                 excludedRoute = typeof excludedRoute === `object` ? excludedRoute : excludedRoute.replace(/^\/|\/$/, ``);
 
                 // test if the passed regular expression is valid
@@ -80,7 +80,7 @@ const serialize = ({ ...sources } = {}, { site, allSitePage }, { mapping, addUnc
     const sourceObject = {};
 
     const allSitePagePathNodeMap = new Map();
-    
+
     allSitePage.edges.forEach((page) => {
         if (page?.node?.url){
             const pathurl = page.node.url.replace(/\/$/,``);
@@ -122,7 +122,7 @@ const serialize = ({ ...sources } = {}, { site, allSitePage }, { mapping, addUnc
                     node = getNodePath(node, allSitePagePathNodeMap);
 
                     sourceObject[mapping[type].sitemap].push({
-                        url: new URL(node.path, siteURL).toString(),
+                        url: new URL(node.path, siteURL).toString() + "/",
                         node: node,
                     });
                 });
