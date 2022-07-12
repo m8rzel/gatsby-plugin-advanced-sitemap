@@ -21,6 +21,7 @@ const serializeMarkdownNodes = (node) => {
             delete node.frontmatter.feature_image;
         }
     }
+    node.slug = `${node.slug}/test/`
 
     return node;
 };
